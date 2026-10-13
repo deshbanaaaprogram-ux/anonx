@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ANONX — Your Space, Your Secrets.</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232563ff'/%3E%3Cpath d='M32 14 16 48h8l3-8h10l3 8h8L32 14Zm0 14 4 8h-8l4-8Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
+<style>
+/* Emoji font: file iOS_v13_3.ttf (ternyata Noto Color Emoji, format CBDT) harus diletakkan sejajar index.html */
+@font-face{font-family:AnonxEmoji;src:url("iOS_v13_3.ttf") format("truetype");font-display:swap;
+unicode-range:U+1F000-1FFFF,U+2190-2BFF,U+FE0F,U+200D,U+2600-27BF}
+:root{--bg:#f6f7f9;--card:#fff;--ink:#111318;--mut:#6b7280;--blue:#2563ff;--line:#e6e8ee;--r:20px;
+--sh:0 1px 2px rgba(17,19,24,.05),0 12px 32px -12px rgba(37,99,255,.18),0 24px 48px -24px rgba(17,19,24,.18)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{font-family:'Plus Jakarta Sans',AnonxEmoji,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;
+background-image:radial-gradient(900px 400px at 80% -10%,#e3ebff 0,transparent 70%),radial-gradient(600px 300px at -10% 30%,#eef2ff 0,transparent 70%)}
+button,input,textarea{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:230px 1fr;max-width:1100px;margin:auto;min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;padding:28px 18px;display:flex;flex-direction:column;gap:6px}
+nav.side .nb{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:0;background:none;cursor:pointer;font-weight:600;color:var(--mut);text-align:left;transition:.2s}
+nav.side .nb.on{background:#fff;color:var(--blue);box-shadow:var(--sh)}
+main{padding:28px 22px 60px;min-width:0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.02em;font-size:20px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:16px}
+.persp{perspective:1100px}
+.tilt{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease,box-shadow .25s;will-change:transform}
+.tilt:hover{box-shadow:0 2px 4px rgba(0,0,0,.05),0 30px 60px -20px rgba(37,99,255,.3)}
+.stage{transform-style:preserve-3d;position:relative}
+.hero{background:linear-gradient(145deg,#fff,#eef3ff);overflow:hidden}
+.hero .chips{position:absolute;right:14px;top:14px;transform-style:preserve-3d;transform:rotateX(14deg) rotateY(-18deg);pointer-events:none}
+.chip{display:block;margin-bottom:8px;padding:6px 12px;border-radius:14px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 24px -8px rgba(37,99,255,.35);font-size:13px;font-weight:600;animation:fl 5s ease-in-out infinite}
+.chip:nth-child(2){transform:translateZ(30px);animation-delay:-1.5s}.chip:nth-child(3){transform:translateZ(60px);animation-delay:-3s}
+@keyframes fl{50%{translate:0 -6px}}
+h1{font-size:26px;font-weight:800;line-height:1.2}h2{font-size:18px;font-weight:800;margin-bottom:10px}
+.mut{color:var(--mut);font-size:14px}.sm{font-size:12px}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:700;cursor:pointer;background:var(--blue);color:#fff;box-shadow:0 4px 0 #1b47c4,0 10px 18px -6px rgba(37,99,255,.5);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1b47c4}
+.btn.g{background:#fff;color:var(--ink);box-shadow:0 3px 0 var(--line),0 0 0 1px var(--line)}.btn.g:active{box-shadow:0 0 0 1px var(--line)}
+.btn.d{background:#fff;color:#dc2626;box-shadow:0 3px 0 #fecaca,0 0 0 1px #fecaca}
+.btn:disabled{opacity:.55;pointer-events:none}.btn.s{padding:7px 12px;font-size:13px;border-radius:11px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.grow{flex:1;min-width:0}
+input,textarea{width:100%;border:1px solid var(--line);background:#fafbfc;border-radius:14px;padding:12px 14px;outline:0}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #dbe5ff}
+textarea{min-height:120px;resize:vertical}label{font-weight:600;font-size:14px;display:block;margin:12px 0 6px}
+.av{border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#2563ff,#7aa2ff);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.linkbox{background:#fff;border:1px dashed #b9c8f5;border-radius:14px;padding:10px 12px;word-break:break-all;font-size:14px;font-weight:600;color:var(--blue)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat b{font-size:30px;display:block}
+.types{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.tp{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:10px;cursor:pointer;text-align:left;transition:.2s}
+.tp.on{border-color:var(--blue);background:var(--c);transform:translateY(-2px)}.tp b{display:block;font-size:13px}.tp span{font-size:11px;color:var(--mut)}
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px}
+.pill{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 13px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}.pill.on{background:var(--ink);color:#fff}
+.msg{border-left:5px solid var(--a);background:var(--c)}.msg.un{box-shadow:0 0 0 2px #cfdcff,var(--sh)}
+.msg p{white-space:pre-wrap;word-break:break-word;margin:8px 0;cursor:pointer}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;background:#fff}
+.sk{height:90px;border-radius:var(--r);background:linear-gradient(90deg,#eceef3 25%,#f7f8fa 50%,#eceef3 75%);background-size:200% 100%;animation:sh 1.3s infinite;margin-bottom:12px}
+@keyframes sh{to{background-position:-200% 0}}
+.empty{text-align:center;padding:40px 10px;color:var(--mut)}.empty .big{font-size:48px}
+#sheetw{position:fixed;inset:0;background:rgba(17,19,24,.4);display:none;align-items:flex-end;justify-content:center;z-index:50}
+#sheetw.on{display:flex}#sheet{background:#fff;width:100%;max-width:520px;border-radius:26px 26px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;animation:up .25s}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@media(min-width:700px){#sheetw{align-items:center}#sheet{border-radius:26px}}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:99px;font-size:14px;z-index:60;display:none;max-width:90vw;text-align:center}
+.ok{color:#059669}.bad{color:#dc2626}
+.pub{max-width:560px;margin:auto;padding:24px 18px 60px}
+footer{text-align:center;color:var(--mut);font-size:12px;margin-top:24px}
+#shot{position:fixed;left:-9999px;top:0;width:540px;height:960px;padding:56px 44px;display:flex;flex-direction:column;justify-content:center;font-family:'Plus Jakarta Sans',AnonxEmoji,system-ui,sans-serif}
+@media(max-width:699px){.app{display:block}main{padding:20px 16px calc(96px + env(safe-area-inset-bottom))}
+nav.side{position:fixed;bottom:0;left:0;right:0;height:auto;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:40;justify-content:space-around}
+nav.side .logo{display:none}nav.side .nb{flex-direction:column;gap:2px;font-size:11px;padding:8px 12px}#toast{bottom:100px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.tilt{transform:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div><div id="sheetw"><div id="sheet"></div></div><div id="toast"></div><div id="shot"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAnalytics,isSupported} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+import {getAuth,onAuthStateChanged,signInAnonymously,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,updateDoc,deleteDoc,collection,query,orderBy,limit,onSnapshot,addDoc,serverTimestamp,runTransaction,writeBatch} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyCYzP3HPwZBBupMeg5yr1DiY5vMplIM7pY",authDomain:"anonx-anonymous.firebaseapp.com",projectId:"anonx-anonymous",messagingSenderId:"596531474927",appId:"1:596531474927:web:e108579929dedc199cc61a",measurementId:"G-7JX69X6RC5"};
+const VER="1.0.0",$=s=>document.querySelector(s),root=$('#root');
+let app,auth,db;
+try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
+isSupported().then(ok=>ok&&getAnalytics(app)).catch(()=>{})}catch(e){root.innerHTML='<div class="pub"><div class="card"><h2>Firebase gagal dimulai</h2><p class="mut">Muat ulang halaman atau periksa koneksi.</p></div></div>';throw e}
+
+const T={anonymous:{e:'🕶️',n:'Anonymous',d:'Pesan tanpa nama',c:'#eef2ff',a:'#4f6bff'},confess:{e:'🤫',n:'Confess',d:'Pengakuan rahasia',c:'#fff1f2',a:'#e11d48'},ask:{e:'❓',n:'Ask Me Anything',d:'Tanya apa saja',c:'#ecfeff',a:'#0891b2'},love:{e:'💌',n:'Love Message',d:'Apresiasi & sayang',c:'#fdf2f8',a:'#db2777'},free:{e:'💬',n:'Free Message',d:'Bebas menulis',c:'#f4f4f5',a:'#52525b'}};
+const S={user:null,profile:null,tab:'home',msgs:[],loaded:false,filter:'all',ftype:'all',lim:30,unsub:null,pt:'anonymous',P:null};
+const PUB=new URLSearchParams(location.search).get('u');
+const UNRE=/^[a-z0-9_]{3,20}$/;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=t=>t?.toDate?t.toDate().toLocaleString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium',timeStyle:'short'})+' WIB':'Mengirim…';
+const link=n=>location.origin+location.pathname+'?u='+n;
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',3200)};
+const sheet=h=>{$('#sheet').innerHTML=h;$('#sheetw').classList.add('on')},closeSheet=()=>$('#sheetw').classList.remove('on');
+$('#sheetw').addEventListener('click',e=>{if(e.target.id==='sheetw')closeSheet()});
+const LOGO=(s=34)=>`<svg width="${s}" height="${s}" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#2563ff"/><path d="M32 14 16 48h8l3-8h10l3 8h8L32 14Zm0 14 4 8h-8l4-8Z" fill="#fff"/></svg>`;
+const av=(p,s=48)=>p?.photoURL?`<img class="av" width="${s}" height="${s}" src="${esc(p.photoURL)}" alt="">`:`<div class="av" style="width:${s}px;height:${s}px;font-size:${s/2.4}px">${esc((p?.displayName||'?')[0].toUpperCase())}</div>`;
+const foot=`<footer>ANONX v${VER} · Your Space, Your Secrets.</footer>`;
+const withTimeout=(p,ms=15000)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
+const errMsg=e=>e?.code==='permission-denied'?'Tidak punya izin untuk operasi ini.':e?.code==='unavailable'||e?.message==='timeout'||!navigator.onLine?'Koneksi bermasalah. Operasi belum terkonfirmasi, coba lagi.':'Terjadi kesalahan. Coba lagi.';
+async function emojiReady(){try{await document.fonts.load('20px AnonxEmoji','😀');await document.fonts.ready;return document.fonts.check('20px AnonxEmoji','😀')}catch{return false}}
+
+/* ---------- Public page ---------- */
+async function renderPublic(){
+ const n=(PUB||'').toLowerCase();
+ root.innerHTML='<div class="pub"><div class="sk"></div></div>';
+ if(!UNRE.test(n))return notFound();
+ try{const s=await getDoc(doc(db,'usernames',n));if(!s.exists())return notFound();S.P={name:n,...s.data()}}
+ catch(e){root.innerHTML=`<div class="pub"><div class="card empty"><div class="big">📡</div><h2>Gagal memuat</h2><p>${errMsg(e)}</p><br><button class="btn" data-act="reload">Coba lagi</button></div></div>`;return}
+ const P=S.P;
+ root.innerHTML=`<div class="pub persp"><div class="logo">${LOGO()}ANONX</div>
+ <div class="card tilt hero" style="text-align:center">${av(P,84)}<h1 style="margin-top:10px">${esc(P.displayName)}</h1><p class="mut">@${esc(P.name)}</p><p style="margin-top:6px">${esc(P.bio||'')}</p></div>
+ <div class="card"><h2>Pilih jenis pesan</h2><div class="types" id="types"></div>
+ <label for="mt">Pesan <span class="mut sm" id="cnt">0/1000</span></label><textarea id="mt" maxlength="1000" placeholder="Tulis sesuatu…"></textarea>
+ <label for="sn">Namamu (opsional)</label><input id="sn" maxlength="40" placeholder="Nama pengirim">
+ <label class="row" style="font-weight:400"><input type="checkbox" id="shn" style="width:auto"> Tampilkan namaku ke penerima (jika dikosongkan, pesan dikirim anonim)</label>
+ <p class="mut sm" style="margin:8px 0">Mode anonim menyembunyikan identitas publikmu, tetapi bukan jaminan tidak ada metadata teknis yang diproses layanan.</p>
+ <h2 style="margin-top:14px">Preview</h2><div id="prev"></div><br>
+ <button class="btn" style="width:100%" data-act="send" id="sendb">Kirim pesan</button></div>
+ <div class="card"><b>Punya link sendiri?</b><p class="mut">Buat ruang ANONX milikmu.</p><br><a class="btn g" style="text-decoration:none;display:inline-block" href="${location.pathname}">Buat akun ANONX</a></div>${foot}</div>`;
+ drawTypes();drawPrev();
+}
+function notFound(){root.innerHTML=`<div class="pub"><div class="card empty"><div class="big">🔍</div><h2>Profil tidak ditemukan</h2><p>Link mungkin salah atau username belum terdaftar.</p><br><a class="btn" style="text-decoration:none;display:inline-block" href="${location.pathname}">Ke ANONX</a></div>${foot}</div>`}
+function drawTypes(){$('#types').innerHTML=Object.entries(T).map(([k,t])=>`<button class="tp ${S.pt===k?'on':''}" style="--c:${t.c}" data-act="type" data-t="${k}"><span style="font-size:22px">${t.e}</span><b>${t.n}</b><span>${t.d}</span></button>`).join('')}
+function drawPrev(){const t=T[S.pt],txt=$('#mt').value,n=$('#sn').value.trim(),sh=$('#shn').checked&&n;
+ $('#cnt').textContent=txt.length+'/1000';
+ $('#prev').innerHTML=`<div class="card msg" style="--a:${t.a};--c:${t.c};margin:0"><span class="tag">${t.e} ${t.n}</span><p>${esc(txt)||'<span class="mut">Pesanmu muncul di sini…</span>'}</p><span class="mut sm">${sh?esc(n):'Anonim'}</span></div>`}
+async function sendMsg(){
+ const txt=$('#mt').value.trim(),n=$('#sn').value.trim(),sh=$('#shn').checked&&!!n,b=$('#sendb');
+ if(!txt)return toast('Pesan wajib diisi.');if(txt.length>1000||n.length>40)return toast('Teks terlalu panjang.');
+ if(Date.now()-(+localStorage.getItem('anonx_last')||0)<20000)return toast('Tunggu sebentar sebelum mengirim lagi.');
+ if(b.disabled)return;b.disabled=true;b.textContent='Mengirim…';
+ try{
+  if(!auth.currentUser)await signInAnonymously(auth);
+  await withTimeout(addDoc(collection(db,'users',S.P.uid,'messages'),{recipientUid:S.P.uid,senderUid:auth.currentUser.uid,messageType:S.pt,messageText:txt,senderDisplayName:sh?n:null,isAnonymous:!sh,isRead:false,createdAt:serverTimestamp()}));
+  localStorage.setItem('anonx_last',Date.now());$('#mt').value='';drawPrev();toast('Pesan terkirim ✔');
+ }catch(e){toast(errMsg(e))}
+ b.disabled=false;b.textContent='Kirim pesan';
+}
+
+/* ---------- Auth / onboarding ---------- */
+function landing(){root.innerHTML=`<div class="pub persp"><div class="logo">${LOGO()}ANONX</div>
+ <div class="card hero tilt" style="padding:32px 22px"><div class="stage"><div class="chips">${['🕶️ Anonymous','💌 Love','🤫 Confess'].map(x=>`<span class="chip">${x}</span>`).join('')}</div>
+ <h1 style="max-width:240px">Your Space, Your Secrets.</h1><p class="mut" style="margin:10px 0 20px;max-width:300px">Terima pesan anonim, confess, dan pertanyaan lewat satu link profil.</p>
+ <button class="btn" data-act="start" id="startb">Mulai</button></div></div>
+ <p class="mut sm">Akun dibuat dengan login anonim Firebase — tanpa email atau password.</p>${foot}</div>`}
+function onboarding(){root.innerHTML=`<div class="pub"><div class="logo">${LOGO()}ANONX</div><div class="card"><h2>Buat profilmu</h2>
+ <div class="row"><div id="pav">${av({displayName:'?'},64)}</div><p class="mut sm">Avatar otomatis menggunakan inisial nama.</p></div>
+ <label for="un">Username</label><input id="un" maxlength="20" autocapitalize="none" autocomplete="off" placeholder="mis. deshb4naaa"><div class="sm mut" id="unh">3–20 karakter: huruf kecil, angka, underscore.</div>
+ <label for="dn">Nama tampilan</label><input id="dn" maxlength="40"><label for="bio">Bio (opsional)</label><input id="bio" maxlength="120">
+ <br><button class="btn" style="width:100%" data-act="register" id="regb">Buat akun</button></div>${foot}</div>`}
+let ut;document.addEventListener('input',e=>{
+ if(e.target.id==='un'){const v=e.target.value=e.target.value.toLowerCase().replace(/[^a-z0-9_]/g,''),h=$('#unh');clearTimeout(ut);
+  if(!UNRE.test(v)){h.className='sm bad';h.textContent='Format tidak valid (3–20, a-z 0-9 _).';return}
+  h.className='sm mut';h.textContent='Memeriksa…';ut=setTimeout(async()=>{try{const s=await getDoc(doc(db,'usernames',v));if($('#un')?.value!==v)return;h.className='sm '+(s.exists()?'bad':'ok');h.textContent=s.exists()?'Username sudah dipakai.':'Username tersedia.'}catch{h.textContent='Gagal memeriksa.'}},400)}
+ if(e.target.id==='mt'||e.target.id==='sn')drawPrev();});
+document.addEventListener('change',e=>{if(e.target.id==='shn')drawPrev()});
+async function register(){
+ const un=$('#un').value,dn=$('#dn').value.trim(),bio=$('#bio').value.trim(),b=$('#regb');
+ if(!UNRE.test(un))return toast('Username tidak valid.');if(!dn||dn.length>40)return toast('Nama tampilan wajib (maks 40).');
+ b.disabled=true;b.textContent='Membuat…';const uid=auth.currentUser.uid;const photoURL=null;
+ try{
+  await runTransaction(db,async t=>{const ur=doc(db,'usernames',un);if((await t.get(ur)).exists())throw new Error('taken');
+   t.set(ur,{uid,displayName:dn,bio,photoURL});t.set(doc(db,'users',uid),{username:un,displayName:dn,bio,photoURL,createdAt:serverTimestamp()})});
+  await boot(auth.currentUser);
+ }catch(e){toast(e.message==='taken'?'Username sudah dipakai.':errMsg(e));b.disabled=false;b.textContent='Buat akun'}
+}
+
+/* ---------- Owner app ---------- */
+function startInbox(){S.unsub?.();S.loaded=false;
+ S.unsub=onSnapshot(query(collection(db,'users',S.user.uid,'messages'),orderBy('createdAt','desc'),limit(S.lim)),sn=>{S.msgs=sn.docs.map(d=>({id:d.id,...d.data()}));S.loaded=true;if(['home','inbox'].includes(S.tab))render()},e=>{S.loaded=true;S.err=errMsg(e);render()})}
+function shell(c){const N=[['home','🏠','Home'],['inbox','📥','Inbox'],['profile','👤','Profil'],['settings','⚙️','Setelan']];
+ root.innerHTML=`<div class="app"><nav class="side"><div class="logo">${LOGO()}ANONX</div>${N.map(([k,e,l])=>`<button class="nb ${S.tab===k?'on':''}" data-act="nav" data-t="${k}"><span>${e}</span>${l}</button>`).join('')}</nav><main>${c}${foot}</main></div>`}
+function linkCard(p){return `<div class="linkbox">${esc(link(p.username))}</div><div class="row" style="margin-top:10px"><button class="btn s" data-act="copy">Salin</button><button class="btn g s" data-act="share">Bagikan</button><a class="btn g s" style="text-decoration:none" href="${esc(link(p.username))}" target="_blank" rel="noopener">Buka / preview</a></div>`}
+function msgCard(m){const t=T[m.messageType]||T.free;return `<div class="card msg tilt ${m.isRead?'':'un'}" style="--a:${t.a};--c:${t.c}"><div class="row"><span class="tag">${t.e} ${t.n}</span><span class="tag">${m.isAnonymous?'Anonim':esc(m.senderDisplayName)}</span><span class="tag">${m.isRead?'Dibaca':'Baru'}</span></div>
+ <p data-act="detail" data-id="${m.id}">${esc(m.messageText)}</p><div class="mut sm">${fmt(m.createdAt)}</div>
+ <div class="row" style="margin-top:10px"><button class="btn g s" data-act="shot" data-id="${m.id}">📸 Screenshot</button><button class="btn g s" data-act="report" data-id="${m.id}">Laporkan</button><button class="btn d s" data-act="del" data-id="${m.id}">Hapus</button></div></div>`}
+function render(){
+ const p=S.profile,un=S.msgs.filter(m=>!m.isRead).length;
+ if(S.tab==='home'){shell(`<div class="persp"><div class="card hero tilt"><div class="stage"><div class="chips">${Object.values(T).slice(0,3).map(t=>`<span class="chip">${t.e} ${t.n}</span>`).join('')}</div>
+  <div class="row">${av(p,56)}<div><div class="mut">Halo,</div><h1>${esc(p.displayName)}</h1></div></div><h2 style="margin-top:18px">Link pribadimu</h2>${linkCard(p)}</div></div></div>
+  <div class="stats"><div class="card stat">${S.loaded?`<b>${S.msgs.length}</b>`:'<div class="sk" style="height:40px"></div>'}<span class="mut">Pesan dimuat</span></div><div class="card stat">${S.loaded?`<b>${un}</b>`:'<div class="sk" style="height:40px"></div>'}<span class="mut">Belum dibaca</span></div></div>
+  <div class="card"><div class="row"><h2 class="grow">Aktivitas terbaru</h2><button class="btn g s" data-act="nav" data-t="inbox">Buka inbox</button></div>
+  ${!S.loaded?'<div class="sk"></div>':S.msgs.length?S.msgs.slice(0,3).map(m=>`<div class="mut" style="padding:6px 0">${(T[m.messageType]||T.free).e} ${esc(m.messageText.slice(0,60))} · ${fmt(m.createdAt)}</div>`).join(''):'<div class="empty"><div class="big">📭</div>Belum ada pesan. Bagikan link-mu untuk mulai menerima.</div>'}</div>`)}
+ else if(S.tab==='inbox'){let L=S.msgs.filter(m=>(S.filter==='all'||(S.filter==='unread')===!m.isRead)&&(S.ftype==='all'||m.messageType===S.ftype));
+  shell(`<h1 style="margin-bottom:12px">Inbox</h1><div class="pills">${[['all','Semua'],['unread','Belum dibaca'],['read','Sudah dibaca']].map(([k,l])=>`<button class="pill ${S.filter===k?'on':''}" data-act="filter" data-v="${k}">${l}</button>`).join('')}</div>
+  <div class="pills"><button class="pill ${S.ftype==='all'?'on':''}" data-act="ftype" data-v="all">Semua jenis</button>${Object.entries(T).map(([k,t])=>`<button class="pill ${S.ftype===k?'on':''}" data-act="ftype" data-v="${k}">${t.e} ${t.n}</button>`).join('')}</div>
+  ${S.err?`<div class="card bad">${S.err}</div>`:''}${!S.loaded?'<div class="sk"></div><div class="sk"></div><div class="sk"></div>':L.length?`<div class="persp">${L.map(msgCard).join('')}</div>`:'<div class="empty"><div class="big">📭</div>Tidak ada pesan. Bagikan link-mu!</div>'}
+  ${S.loaded&&S.msgs.length>=S.lim?'<button class="btn g" style="width:100%" data-act="more">Muat lebih banyak</button>':''}`)}
+ else if(S.tab==='profile'){shell(`<div class="card tilt" style="text-align:center">${av(p,96)}<h1 style="margin-top:10px">${esc(p.displayName)}</h1><p class="mut">@${esc(p.username)}</p><p>${esc(p.bio||'')}</p><p class="mut sm">Bergabung ${fmt(p.createdAt)}</p></div><div class="card"><h2>Personal link</h2>${linkCard(p)}</div>`)}
+ else shell(`<h1 style="margin-bottom:12px">Pengaturan</h1><div class="card"><h2>Edit profil</h2><div class="row"><div id="spav">${av(p,64)}</div><p class="mut sm">Avatar menggunakan inisial nama.</p></div><label for="sdn">Nama tampilan</label><input id="sdn" maxlength="40" value="${esc(p.displayName)}"><label for="sbio">Bio</label><input id="sbio" maxlength="120" value="${esc(p.bio||'')}"><br><button class="btn" data-act="save" id="saveb">Simpan</button></div>
+  <div class="card"><h2>Keamanan akun</h2><p class="mut">Akunmu memakai login anonim. Jika data browser terhapus atau kamu logout, akses ke akun ini bisa hilang permanen. Penautan Google/email untuk pemulihan belum tersedia di versi ini.</p></div>
+  <div class="card"><h2>Emoji</h2><p class="mut" id="emo">Memeriksa font…</p></div>
+  <div class="card"><h2>Informasi</h2><p class="mut">ANONX v${VER}. Anonim = identitas publik disembunyikan, bukan jaminan tanpa metadata teknis. Gunakan dengan aman dan laporkan penyalahgunaan.</p><br><button class="btn d" data-act="logout">Logout</button></div>`);
+ if(S.tab==='settings')emojiReady().then(ok=>{const e=$('#emo');if(e)e.textContent=ok?'Font emoji dari file iOS_v13_3.ttf aktif (gaya Noto Color Emoji — bukan emoji Apple).':'File font emoji tidak termuat; memakai emoji bawaan perangkat, gaya bisa berbeda.'});
+}
+async function saveProfile(){
+ const dn=$('#sdn').value.trim(),bio=$('#sbio').value.trim(),b=$('#saveb');if(!dn||dn.length>40)return toast('Nama tampilan wajib (maks 40).');
+ b.disabled=true;const d={displayName:dn,bio,photoURL:null};
+ try{const bt=writeBatch(db);bt.update(doc(db,'users',S.user.uid),d);bt.update(doc(db,'usernames',S.profile.username),d);await bt.commit();Object.assign(S.profile,d);toast('Tersimpan ✔');render()}
+ catch(e){toast(errMsg(e))}b.disabled=false}
+
+/* ---------- Screenshot ---------- */
+async function shot(id){const m=S.msgs.find(x=>x.id===id);if(!m)return;const t=T[m.messageType]||T.free;
+ sheet('<div class="empty">Membuat gambar…</div>');
+ try{const el=$('#shot');el.style.background=`linear-gradient(160deg,#fff,${t.c})`;
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:26px">${LOGO(44)}ANONX</div><div style="margin:36px 0 18px"><span style="background:#fff;border:2px solid ${t.a};color:${t.a};border-radius:99px;padding:6px 18px;font-weight:800;font-size:22px">${t.e} ${t.n}</span></div>
+  <div style="background:#fff;border-left:8px solid ${t.a};border-radius:28px;padding:34px;font-size:${m.messageText.length>300?22:30}px;line-height:1.45;font-weight:600;white-space:pre-wrap;word-break:break-word;box-shadow:0 30px 60px -30px rgba(0,0,0,.3)">${esc(m.messageText)}</div>
+  <div style="margin-top:18px;color:#6b7280;font-size:20px">${m.isAnonymous?'— Anonim':'— '+esc(m.senderDisplayName)}</div><div style="margin-top:auto;padding-top:30px;color:#9ca3af;font-size:16px">anonx · Your Space, Your Secrets.</div>`;
+  await emojiReady();const c=await html2canvas(el,{scale:2,backgroundColor:null,useCORS:true});
+  const blob=await new Promise((r,j)=>c.toBlob(b=>b?r(b):j(new Error('blob')),'image/png'));S.blob=blob;const u=URL.createObjectURL(blob);
+  sheet(`<h2>Screenshot</h2><img src="${u}" style="width:100%;max-height:60vh;object-fit:contain;border-radius:14px"><div class="row" style="margin-top:12px"><a class="btn" style="text-decoration:none" download="anonx-${id}.png" href="${u}">Unduh PNG</a><button class="btn g" data-act="shareimg">Bagikan</button><button class="btn g" data-act="close">Tutup</button></div>`);
+ }catch{sheet('<h2>Gagal</h2><p class="mut">Screenshot tidak dapat dibuat. Coba lagi.</p><br><button class="btn g" data-act="close">Tutup</button>')}}
+
+/* ---------- Actions ---------- */
+const copy=async()=>{const l=link(S.profile?.username||S.P.name);try{await navigator.clipboard.writeText(l);toast('Link disalin')}catch{sheet(`<h2>Salin manual</h2><div class="linkbox">${esc(l)}</div>`)}};
+const acts={
+ reload:()=>renderPublic(),close:closeSheet,copy,
+ start:async()=>{const b=$('#startb');b.disabled=true;try{await signInAnonymously(auth)}catch(e){toast(errMsg(e));b.disabled=false}},
+ type:d=>{S.pt=d.t;drawTypes();drawPrev()},send:sendMsg,register,
+ pick:()=>$('#photo').click(),
+ nav:d=>{S.tab=d.t;render();scrollTo(0,0)},filter:d=>{S.filter=d.v;render()},ftype:d=>{S.ftype=d.v;render()},
+ more:()=>{S.lim+=30;startInbox()},save:saveProfile,shot:d=>shot(d.id),
+ share:async()=>{const l=link(S.profile.username);if(navigator.share){try{await navigator.share({title:'ANONX',text:'Kirim pesan anonim ke aku!',url:l})}catch{}}else copy()},
+ shareimg:async()=>{const f=new File([S.blob],'anonx.png',{type:'image/png'});if(navigator.canShare?.({files:[f]})){try{await navigator.share({files:[f]})}catch{}}else toast('Berbagi file tidak didukung — gunakan Unduh.')},
+ detail:async d=>{const m=S.msgs.find(x=>x.id===d.id),t=T[m.messageType]||T.free;
+  sheet(`<span class="tag" style="background:${t.c}">${t.e} ${t.n}</span><p style="white-space:pre-wrap;word-break:break-word;margin:14px 0;font-size:17px">${esc(m.messageText)}</p><p class="mut sm">${m.isAnonymous?'Anonim':esc(m.senderDisplayName)} · ${fmt(m.createdAt)}</p><br><button class="btn g" data-act="close">Tutup</button>`);
+  if(!m.isRead)try{await updateDoc(doc(db,'users',S.user.uid,'messages',m.id),{isRead:true})}catch(e){toast(errMsg(e))}},
+ del:d=>sheet(`<h2>Hapus pesan?</h2><p class="mut">Tindakan ini permanen.</p><br><div class="row"><button class="btn d" data-act="delok" data-id="${d.id}">Hapus</button><button class="btn g" data-act="close">Batal</button></div>`),
+ delok:async d=>{try{await deleteDoc(doc(db,'users',S.user.uid,'messages',d.id));closeSheet();toast('Pesan dihapus')}catch(e){toast(errMsg(e))}},
+ report:async d=>{try{await addDoc(collection(db,'reports'),{reporterUid:S.user.uid,messageId:d.id,createdAt:serverTimestamp()});toast('Laporan terkirim')}catch(e){toast(errMsg(e))}},
+ logout:()=>sheet(`<h2>Logout?</h2><p class="mut">Akun anonim bisa hilang permanen setelah logout karena belum ada penautan pemulihan.</p><br><div class="row"><button class="btn d" data-act="logoutok">Logout</button><button class="btn g" data-act="close">Batal</button></div>`),
+ logoutok:async()=>{closeSheet();S.unsub?.();S.profile=null;await signOut(auth)}};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b)acts[b.dataset.act]?.(b.dataset)});
+
+/* 3D tilt (pointer halus saja) */
+if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+ document.addEventListener('pointermove',e=>{const c=e.target.closest?.('.tilt');if(!c)return;const r=c.getBoundingClientRect();
+  c.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*8+'deg');c.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*8+'deg')});
+ document.addEventListener('pointerout',e=>{const c=e.target.closest?.('.tilt');if(c){c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')}})}
+
+/* ---------- Boot ---------- */
+async function boot(u){S.user=u;
+ if(!u)return landing();
+ root.innerHTML='<div class="pub"><div class="sk"></div><div class="sk"></div></div>';
+ try{const s=await getDoc(doc(db,'users',u.uid));if(!s.exists())return onboarding();S.profile=s.data();startInbox();render()}
+ catch(e){root.innerHTML=`<div class="pub"><div class="card empty"><div class="big">⚠️</div><h2>Gagal memuat akun</h2><p>${errMsg(e)}</p><br><button class="btn" data-act="reload2">Coba lagi</button></div></div>`}}
+acts.reload2=()=>boot(auth.currentUser);
+if(PUB)renderPublic();else onAuthStateChanged(auth,u=>{if(!S.profile||!u||u.uid!==S.user?.uid)boot(u)});
+</script>
+</body>
+</html>
